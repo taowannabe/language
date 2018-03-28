@@ -194,56 +194,138 @@ def heapSort(heap):
     return heap
 ###################################   二叉树    #######################
 # 搜索二叉树
+class BSTNode(object):
+    def __init__(self,key):
+        self.key = key
+        self.left = None
+        self.right = None
+        self.parent = None
+    def __str__(self):
+        return str(self.key) + " : " + super().__str__();
+        
 # 插入
 def insertSearchBinaryTree(sbt,x):
-    if(sbt.get('key') == None):
-        sbt['key'] = x
+    if(sbt.key == None):
+        sbt.key = x
         return
     while(True):
-        if (sbt.get('key') < x):
-            if(sbt.get('left') == None):
-                sbt['left'] = {}
-            return insertSearchBinaryTree(sbt.get('left'),x)
-        elif (sbt.get('key') >= x):
-            if(sbt.get('right') == None):
-                sbt['right'] = {}
-            return insertSearchBinaryTree(sbt.get('right'),x)
-    pass
+        if (sbt.key > x ):
+            if(sbt.left == None):
+                sbt.left = BSTNode(x)
+                sbt.left.parent = sbt
+                return
+            else:
+                return insertSearchBinaryTree(sbt.left,x)
+        elif (sbt.key <= x):
+            if(sbt.right == None):
+                sbt.right = BSTNode(x)
+                sbt.right.parent = sbt
+                return
+            else:
+                return insertSearchBinaryTree(sbt.right,x)
+            
 # 创建
 def createSearchBinaryTree(list):
-    sbt = {'key':list[0]}
+    if(len(list) <= 0):
+        return None
+    sbt = BSTNode(list[0])
     for x in list[1:]:
         insertSearchBinaryTree(sbt,x)
     return sbt
-    pass
 # 搜索
 def searchSearchBinaryTree(sbt,x):
-    if(sbt == None):
-        return None
-    if(sbt.get('right') == None):
-        sbt['right'] = {}
-    if(sbt.get('left') == None):
-        sbt['left'] = {}
-    if(sbt.get('key') < x and sbt.get('right').get('key') != None):
-        return searchSearchBinaryTree(sbt.get('right'),x)
-    elif(sbt.get('key') > x and sbt.get('left').get('key') != None):
-        return searchSearchBinaryTree(sbt.get('left'),x)
-    else:
+    if(sbt.key < x and sbt.right != None):
+        return searchSearchBinaryTree(sbt.right,x)
+    elif(sbt.key > x and sbt.left != None):
+        return searchSearchBinaryTree(sbt.left,x)
+    elif(sbt.key == x):
         return sbt
-    pass
-# 查找前驱
-def findPreNode(x):
-    pass
+    else:
+        return None
+# 查找后继
+def findNextNode(sbt):
+    if(sbt.right != None):
+        rightMin = sbt.right
+        while(rightMin.left != None):
+            rightMin = rightMin.left
+        return rightMin
+    else:
+        p = sbt.parent
+        while(sbt == p.left):
+            sbt = p
+            p = p.parent
+            if(p == None):
+                break
+        return sbt
 # 删除
-def deleteSearchBinaryTree(sbt,x):
-    pass
+def deleteSearchBinaryTree(node):
+    if(node.left == None and node.right == None):
+        p = node.parent
+        if(p != None and p.left == node):
+            p.left = None
+        elif(p != None and p.right == node):
+            p.right = None
+        node.parent = None
+    elif(node.left != None and node.right != None):
+        rightMin = node.right
+        while(rightMin.left != None):
+            rightMin = rightMin.left
+        if(rightMin.right != None):
+            rightMin.right.parent = rightMin.parent
+            if(rightMin.parent.left == rightMin):
+                rightMin.parent.left = rightMin.right
+            else:
+                rightMin.parent.right = rightMin.right
+        else:    
+            if(rightMin.parent.left == rightMin):
+                rightMin.parent.left = None
+            else:
+                rightMin.parent.right = None
+        rightMin.parent = node.parent
+        rightMin.left = node.left
+        rightMin.right = node.right
+        if(node.parent.left == node):
+            node.parent.left = rightMin
+        else:
+            node.parent.right = rightMin
+    else:
+        if(node.left != None):
+            if(node.parent.left == node):
+                node.parent.left = node.left
+            else:
+                node.parent.right = node.left
+            node.left.parent = node.parent
+        elif(node.right != None):
+            if(node.parent.left == node):
+                node.parent.left = node.right
+            else:
+                node.parent.right = node.right
+            node.right.parent = node.parent
+#########################   红黑树   #################
+class RBTNode(BSTNode):
+    def __init__(self,key,color):
+        super().__init__(self,key)
+        self.color = color
 
     
-
+#散列
+def myhash(key,targetList):
+    length = len(targetList)
+    index = (key * key + key) % length
+    i = 0
+    while(targetList[index] != None and i < length):
+        index = (index + 1) % length
+        i = i + 1
+    targetList[index] = key
+    pass
 if(__name__=="__main__"):
     # targetlist = list(range(1000,0,-1))
-    # targetlist = [random.randint(0,100) for x in range(0,100)]
-    # targetlist = list(range(0,1000))
+    targetlist = []
+    for x in range(0,100):
+        targetlist.append(None)
+    for x in range(0,100):
+        myhash(x,targetlist)
+    # targetlist = list(range(10,0,-1))
     # print(targetlist)
 
     # insertSort(targetlist)
@@ -257,9 +339,14 @@ if(__name__=="__main__"):
     # print(findMaxArray(targetlist,0,len(targetlist)))
 
     # print(heapSort(list([16,4,10,14,7,9,3])))
-
-    # sbt = createSearchBinaryTree(targetlist)
-    # print(searchSearchBinaryTree(sbt,2))
+    # print(targetlist)
+    # targetlist = [1, 2, 6, 4, 9, 1, 7, 1, 3, 0]
+    sbt = createSearchBinaryTree(targetlist)
+    deleteNode = searchSearchBinaryTree(sbt,50)
+    print(deleteNode)
+    if(deleteNode != None):
+        deleteSearchBinaryTree(deleteNode)
+    print(searchSearchBinaryTree(sbt,50))
     # pass
  
 
