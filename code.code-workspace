@@ -1,0 +1,21 @@
+{
+    "folders": [{
+            "path": "C#"
+        },
+        {
+            "path": "JAVA"
+        },
+        {
+            "path": "kotlin"
+        },
+        {
+            "path": "META-INF"
+        },
+        {
+            "path": "Node"
+        },
+        {
+            "path": "Python"
+        }
+    ]
+}
