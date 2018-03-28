@@ -242,7 +242,7 @@ def deleteSearchBinaryTree(sbt,x):
 
 if(__name__=="__main__"):
     # targetlist = list(range(1000,0,-1))
-    targetlist = [random.randint(0,100) for x in range(0,100)]
+    # targetlist = [random.randint(0,100) for x in range(0,100)]
     # targetlist = list(range(0,1000))
     # print(targetlist)
 
@@ -258,8 +258,9 @@ if(__name__=="__main__"):
 
     # print(heapSort(list([16,4,10,14,7,9,3])))
 
-    sbt = createSearchBinaryTree(targetlist)
-    print(searchSearchBinaryTree(sbt,2))
-    pass
+    # sbt = createSearchBinaryTree(targetlist)
+    # print(searchSearchBinaryTree(sbt,2))
+    # pass
+ 
 
         
