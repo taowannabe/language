@@ -303,9 +303,97 @@ def deleteSearchBinaryTree(node):
             node.right.parent = node.parent
 #########################   红黑树   #################
 class RBTNode(BSTNode):
+    RED = "red"
+    BLACK = "black"
     def __init__(self,key,color):
         super().__init__(self,key)
         self.color = color
+# 插入
+def insertRBTree(tree,node):
+    if(tree == None or node == None):
+        return
+    y = tree
+
+    while(True):
+        if(node.key < y.key):
+            if(y.left == None):
+                node.color = RBTNode.RED
+                y.left = node
+                break
+            else:
+                y = y.left
+        else:
+            if(y.right == None):
+                node.color = RBTNode.RED
+                y.right = node
+                break
+            else:
+                y = y.right
+    
+    z = node
+    while(True):
+        p = z.parent
+        pp = p.parent
+        if(p.color == RBTNode.BLACK):
+            return
+        elif(pp.left == p and pp.right.color == RBTNode.RED):
+            #叔叔节点为红色，则父，叔，爷反转颜色
+            p.color = RBTNode.BLACK
+            pp.right.color = RBTNode.BLACK
+            pp.color = RBTNode.RED
+            #然后左旋
+            leftRotate(p)
+            #进入下次迭代
+            z = p
+            continue
+        elif(pp.right == p and pp.left.color == RBTNode.RED):
+            #同上左右对称
+            p.color = RBTNode.BLACK
+            pp.left.color = RBTNode.BLACK
+            pp.color = RBTNode.REDs
+            rightRotate(p)
+            z = p
+            continue
+        elif(pp.left == p and pp.right.color == RBTNode.BLACK):
+            #按中间节点颜色讨论
+            pass
+        elif(pp.right == p and pp.left.color == RBTNode.RED):
+            #按中间节点颜色讨论
+            pass
+
+
+#左旋
+def leftRotate(leftChild):
+    if(leftChild.parent == None or leftChild.right == None):
+        raise RuntimeError("parent and leftChild.right can not be None")
+    p = leftChild.parent
+    if(p.paretn.left == p):
+        p.parent.left = leftChild
+    else:
+        p.parent.right = leftChild
+    leftChild.parent = p.parent
+    p.parent = leftChild
+    p.left = leftChild.right
+    leftChild.right = p
+    p.left.parent = p
+    pass
+#右旋
+def rightRotate(rightChild):
+        if(rightChild.parent == None or rightChild.left == None):
+            raise RuntimeError("parent and rightChild.left can not be None")
+    p = rightChild.parent
+    if(p.paretn.right == p):
+        p.parent.right = rightChild
+    else:
+        p.parent.left = rightChildw
+    rightChild.parent = p.parent
+    p.parent = rightChild
+    p.right = rightChild.left
+    rightChild.left = p
+    p.right.parent = p
+    pass
+            
+                        
 
     
 #散列
@@ -341,13 +429,14 @@ if(__name__=="__main__"):
     # print(heapSort(list([16,4,10,14,7,9,3])))
     # print(targetlist)
     # targetlist = [1, 2, 6, 4, 9, 1, 7, 1, 3, 0]
-    sbt = createSearchBinaryTree(targetlist)
-    deleteNode = searchSearchBinaryTree(sbt,50)
-    print(deleteNode)
-    if(deleteNode != None):
-        deleteSearchBinaryTree(deleteNode)
-    print(searchSearchBinaryTree(sbt,50))
-    # pass
+    # sbt = createSearchBinaryTree(targetlist)
+    # deleteNode = searchSearchBinaryTree(sbt,50)
+    # print(deleteNode)
+    # if(deleteNode != None):
+    #     deleteSearchBinaryTree(deleteNode)
+    # print(searchSearchBinaryTree(sbt,50))
+    
+    pass
  
 
         
